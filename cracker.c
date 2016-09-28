@@ -5,7 +5,13 @@
 #include <stdlib.h>
 #include <crypt.h>
 
-
+struct recurse_arg{
+  char* target;
+  char* current;
+  int index;
+  int length;
+  int thread_number;
+}
 
 void recursive(char* target,char* current,int index,  int length){
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
@@ -37,7 +43,8 @@ void recursive(char* target,char* current,int index,  int length){
 }
 
 void* threaded_recurse(void* args){
-  recursive()
+  recurse_arg* casted_args = (recurse_arg*) args;
+  recursive(casted_args.target,casted_args.current,casted_args.index,casted_args.length);
 }
 
 int main(int argc, char** argv){
@@ -57,9 +64,18 @@ int main(int argc, char** argv){
   char target[256];
   pthread_t pthreads[atoi(argv[1])];
   int i;
-  void* args;
+  
+  
+  
   for(i=0;i<atoi(argv[1]);i++){
-    pthread_create(&pthreads[i],NULL,threaded_recurse,args);
+    recurse_arg* args;
+    arg.target="";
+    arg.current=0;
+    arg.index=0;
+    arg.length=5;
+    arg.thread_number = i;
+
+    pthread_create(&pthreads[i],NULL,threaded_recurse,(void*)args);
   }
   
   for(i=1; i < atoi(argv[2]); i++){
@@ -67,7 +83,7 @@ int main(int argc, char** argv){
     printf("Nothing for length %d\n",i);
   }
  for(i=0;i<atoi(argv[1]);i++){
-    pthread_(&i);
+    pthread_join(&pthreads[i]);
   }
 
   free(string);
