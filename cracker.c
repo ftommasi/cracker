@@ -47,7 +47,6 @@ void tester(int length){
       for(i=length-1; i > -1; i--){
         for(j=0; j < allowed_alphabet_size+1; j++){
           attempt[i] = allowed_alphabet[j%allowed_alphabet_size];
-          printf("%s\n",attempt);
         }
       }
     }
@@ -70,13 +69,11 @@ char* bruteforce(){
 }
 
 
-void recursive(char* current, int length){
-  printf("entered recursive\n"); 
+void recursive(char* current,int index,  int length){
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
   const unsigned int allowed_alphabet_size = 26;
   
   if(length < 1 ){
-    printf("basecase\n");
     char* end = '\0';
     //strcat(current,end);
     printf("%s\n",current);
@@ -87,9 +84,8 @@ void recursive(char* current, int length){
     int i;
     for(i=0; i < allowed_alphabet_size; i++ ){
       char* letter = allowed_alphabet[i];
-      strcat(current,letter);
-      printf("past cat\n");
-      recursive(current,length-1);
+      current[index] = allowed_alphabet[i]; 
+      recursive(current,index+1,length-1);
     }
    return; 
   }
@@ -103,8 +99,7 @@ int main(int argc, char** argv){
   char* string = (char*)malloc(10*sizeof(char));
   char * empty = "";
   strcat(string,empty);
-  recursive(string,2);
-  //printf("FINAL RESULt: %s\n",recursive(3));
+  recursive(string,0,3);
 
   if(argc != 3){
     printf("Error: Wrong number of input args\n  Usage: crack <threads> <keysize> <target>\n");
