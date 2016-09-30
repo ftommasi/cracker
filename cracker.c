@@ -11,13 +11,17 @@ struct recurse_arg{
   int index;  
   int length;
   int thread_number;
+  char start;
+  char end;
+  int num_threads;
+
 } ;
 
 
 
 
 
-void* recursive(char* target,char* current,int index,  int length){
+void* recursive(char* target,char* current,int index, int length, int start,int end){
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
   const unsigned int allowed_alphabet_size = 26;
   
@@ -37,9 +41,9 @@ void* recursive(char* target,char* current,int index,  int length){
   
   else{
     int i;
-    for(i=0; i < allowed_alphabet_size; i++ ){
+    for(i=start; i < end; i++ ){
       current[index] = allowed_alphabet[i]; 
-      recursive(target,current,index+1,length-1);
+      recursive(target,current,index+1,length-1,0,allowed_alphabet_size);
     }
    return; 
   }
@@ -47,13 +51,33 @@ void* recursive(char* target,char* current,int index,  int length){
 }
 
 void* threaded_recurse(void* args){
- struct recurse_arg* casted_args;
- //casted_args= (struct recurse_arg*) args;
- //recursive(casted_args.target,casted_args.current,casted_args.index,casted_args.length);
+ struct recurse_arg* arg;
+  const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
+  const unsigned int allowed_alphabet_size = 26;
+  
+  int num_threads = arg->num_threads;
+  int chunks = allowed_alphabet_size/num_threads;
+  int thread_start = arg->thread_number * (chunks-1);
+  int thread_finish = arg->thread_number * (chunks);
+  
+  printf("chunks %d size %d start %d finish",chunks,allowed_alphabet_size,thread_start,thread_finish);
+  recursive(arg->target,arg->current,arg->index,arg->length,thread_start,thread_finish);
 
 }
 
 int main(int argc, char** argv){
+  char* string = (char*)malloc(256*sizeof(char));
+  char * empty = "";
+  strcat(string,empty);
+  char target[256];
+  pthread_t pthreads[atoi(argv[1])];
+
+  int i;
+  for(i=1; i < atoi(argv[2])+1; i++){
+    recursive(argv[3],string,0,i,0,4);
+    printf("Nothing for length %d\n",i);
+  }
+
   if(argc != 3){
     printf("Error: Wrong number of input args\n  Usage: crack <threads> <keysize> <target>\n");
     return -1;
@@ -64,13 +88,7 @@ int main(int argc, char** argv){
     return -1;
   }
 
-  char* string = (char*)malloc(256*sizeof(char));
-  char * empty = "";
-  strcat(string,empty);
-  char target[256];
-  pthread_t pthreads[atoi(argv[1])];
-  int i;
-  
+    
   
   
   for(i=0;i<atoi(argv[1]);i++){
@@ -82,18 +100,11 @@ int main(int argc, char** argv){
     arg->current = allowed_alphabet[allowed_alphabet_size/i];
     arg->index=1;
     arg->length=5;
-    arg->thread_number = i;
-    
-    printf("Thread %d is starting at char %c\n",i,allowed_alphabet_size/i);
+    arg->thread_number = i+1;
+    //printf("Thread %d is starting at char %c\n",i,allowed_alphabet_size/i);
     pthread_create(&pthreads[i],NULL,threaded_recurse,NULL);
   }
 
-#if 0 
-  for(i=1; i < atoi(argv[2]); i++){
-    recursive(argv[3],string,0,i);
-    printf("Nothing for length %d\n",i);
-  }
-#endif
  for(i=0;i<atoi(argv[1]);i++){
     pthread_join(pthreads[i],NULL);
   }
