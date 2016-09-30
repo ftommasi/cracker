@@ -8,12 +8,16 @@
 struct recurse_arg{
   char* target;
   char* current;
-  int index;
+  int index;  
   int length;
   int thread_number;
-}
+} ;
 
-void recursive(char* target,char* current,int index,  int length){
+
+
+
+
+void* recursive(char* target,char* current,int index,  int length){
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
   const unsigned int allowed_alphabet_size = 26;
   
@@ -43,8 +47,10 @@ void recursive(char* target,char* current,int index,  int length){
 }
 
 void* threaded_recurse(void* args){
-  recurse_arg* casted_args = (recurse_arg*) args;
-  recursive(casted_args.target,casted_args.current,casted_args.index,casted_args.length);
+ struct recurse_arg* casted_args;
+ //casted_args= (struct recurse_arg*) args;
+ //recursive(casted_args.target,casted_args.current,casted_args.index,casted_args.length);
+
 }
 
 int main(int argc, char** argv){
@@ -68,22 +74,28 @@ int main(int argc, char** argv){
   
   
   for(i=0;i<atoi(argv[1]);i++){
-    recurse_arg* args;
-    arg.target="";
-    arg.current=0;
-    arg.index=0;
-    arg.length=5;
-    arg.thread_number = i;
-
-    pthread_create(&pthreads[i],NULL,threaded_recurse,(void*)args);
+    const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
+    const unsigned int allowed_alphabet_size = 26;
+    struct recurse_arg* arg;
+    
+    arg->target = argv[3];
+    arg->current = allowed_alphabet[allowed_alphabet_size/i];
+    arg->index=1;
+    arg->length=5;
+    arg->thread_number = i;
+    
+    printf("Thread %d is starting at char %c\n",i,allowed_alphabet_size/i);
+    pthread_create(&pthreads[i],NULL,threaded_recurse,NULL);
   }
-  
+
+#if 0 
   for(i=1; i < atoi(argv[2]); i++){
     recursive(argv[3],string,0,i);
     printf("Nothing for length %d\n",i);
   }
+#endif
  for(i=0;i<atoi(argv[1]);i++){
-    pthread_join(&pthreads[i]);
+    pthread_join(pthreads[i],NULL);
   }
 
   free(string);
