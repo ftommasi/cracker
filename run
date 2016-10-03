@@ -1,1 +1,3 @@
-./cracker 1 9 $(perl -e "print crypt("apple","na")")
+./cracker 4 9 $(perl -e "print crypt("zoozle","na")")
+
+
