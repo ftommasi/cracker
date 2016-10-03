@@ -134,11 +134,11 @@ int main(int argc, char** argv){
 
  for(i=0;i<atoi(argv[1]);i++){
    pthread_join(pthreads[i],NULL);
-   free(strings[i]);
-   free(args[i]); 
+   //free(strings[i]);
+   //free(args[i]); 
   }
 
-  free(string);
+  //free(string);
   return 0;
 }
 

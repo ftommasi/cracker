@@ -1,0 +1,77 @@
+echo 'aaa'
+./cracker 4 9 $(perl -e "print crypt("aaa","na")")
+
+echo 'baa'
+./cracker 4 9 $(perl -e "print crypt("baa","na")")
+
+echo 'caa'
+./cracker 4 9 $(perl -e "print crypt("caa","na")")
+
+echo 'daa'
+./cracker 4 9 $(perl -e "print crypt("daa","na")")
+
+echo 'eaa'
+./cracker 4 9 $(perl -e "print crypt("eaa","na")")
+
+echo 'faa'
+./cracker 4 9 $(perl -e "print crypt("faa","na")")
+
+echo 'gaa'
+./cracker 4 9 $(perl -e "print crypt("gaa","na")")
+
+echo 'haa'
+./cracker 4 9 $(perl -e "print crypt("haa","na")")
+
+echo 'iaa'
+./cracker 4 9 $(perl -e "print crypt("iaa","na")")
+
+echo 'jaa'
+./cracker 4 9 $(perl -e "print crypt("jaa","na")")
+
+echo 'kaa'
+./cracker 4 9 $(perl -e "print crypt("kaa","na")")
+
+echo 'laa'
+./cracker 4 9 $(perl -e "print crypt("laa","na")")
+
+echo 'maa'
+./cracker 4 9 $(perl -e "print crypt("maa","na")")
+
+echo 'naa'
+./cracker 4 9 $(perl -e "print crypt("naa","na")")
+
+echo 'oaa'
+./cracker 4 9 $(perl -e "print crypt("oaa","na")")
+
+echo 'paa'
+./cracker 4 9 $(perl -e "print crypt("paa","na")")
+
+echo 'qaa'
+./cracker 4 9 $(perl -e "print crypt("qaa","na")")
+
+echo 'raa'
+./cracker 4 9 $(perl -e "print crypt("raa","na")")
+
+echo 'saa'
+./cracker 4 9 $(perl -e "print crypt("saa","na")")
+
+echo 'taa'
+./cracker 4 9 $(perl -e "print crypt("taa","na")")
+
+echo 'uaa'
+./cracker 4 9 $(perl -e "print crypt("uaa","na")")
+
+echo 'vaa'
+./cracker 4 9 $(perl -e "print crypt("vaa","na")")
+
+echo 'waa'
+./cracker 4 9 $(perl -e "print crypt("waa","na")")
+
+echo 'xaa'
+./cracker 4 9 $(perl -e "print crypt("xaa","na")")
+
+echo 'yaa'
+./cracker 4 9 $(perl -e "print crypt("yaa","na")")
+
+echo 'zaa'
+./cracker 4 9 $(perl -e "print crypt("zaa","na")")

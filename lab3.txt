@@ -1,0 +1,138 @@
+1. Fausto Tommasi
+
+2. pass
+
+3. ferry
+
+4.
+  1 thread:
+  real    0m2.260s
+  user    0m2.251s
+  sys     0m0.004s
+
+5.
+  2 threads:
+  real    0m1.392s
+  user    0m2.555s
+  sys     0m0.000s
+
+  4 threads:
+  real    0m0.749s
+  user    0m2.799s
+  sys     0m0.001s
+
+  6 threads:
+  real    0m0.831s
+  user    0m3.147s
+  sys     0m0.004s
+
+
+  8 threads:
+  real    0m0.924s
+  user    0m3.521s
+  sys     0m0.006s
+
+  10 threads:
+  real    0m0.964s
+  user    0m3.614s
+  sys     0m0.010s
+
+  12 threads:
+  real    0m1.173s
+  user    0m4.428s
+  sys     0m0.002s
+
+6.
+
+ 2 threads:
+  0m1.392s/  0m2.260s
+
+  4 threads:
+  0m0.749s/  0m2.260s
+
+
+  6 threads:
+  0m0.831s/  0m2.260s
+
+
+  8 threads:
+  0m0.924s/  0m2.260s
+
+
+  10 threads:
+  0m0.964s/  0m2.260s
+
+
+  12 threads:
+  0m1.173s/  0m2.260s
+
+7.
+
+8.
+
+  
+9.
+  keysize 1:
+  real    0m0.005s
+  user    0m0.000s
+  sys     0m0.003s
+
+  keysize2:
+  real    0m0.004s
+  user    0m0.001s
+  sys     0m0.002s
+
+  keysize3:
+  real    0m0.007s
+  user    0m0.004s
+  sys     0m0.003s
+
+  keysize4:
+  real    0m0.093s
+  user    0m0.088s
+  sys     0m0.002s
+
+  keysize5:
+  real    0m2.374s
+  user    0m2.370s
+  sys     0m0.002s
+
+  keysize6:
+  real    1m4.661s
+  user    1m4.625s
+  sys     0m0.004s
+
+
+  keysize7:
+  real    8m4.661s
+  user    8m4.625s
+  sys     0m0.004s
+
+
+  keysize8:
+  real    80m4.661s
+  user    80m4.625s
+  sys     0m0.004s
+
+
+10. memory leaks?
+
+11. Some extra credit attempted. Listed below
+
+EXTRA CREDIT:
+
+1.
+  abA.g8pU2Iffo  salts
+  cdfnIXMyMCpPg  salts
+  efgC/gw8PDKhs  salts
+  ghLneTdBMxJP.  salts 
+  ijSsXTgIC7QRU  salts
+  klr7dT7cAODsk  donot
+  mn4iWfK0m76t6  skipp
+  opjPsgpXaahxM  anyyy
+  qr6ncfvfqecME  salts
+
+2.
+  password salts are useful because a completely different hash is generated for the exact same password if the salt is different. That is to say, in terms of security it doesn't matter if one or more users have similar passwords because their hashes are completely different. This way if a single password is cracked it does not compromise the passwords of other users have the exact same password.
+
+  3. Did not atempt ASCII
