@@ -14,12 +14,14 @@ struct recurse_arg{
   int thread_number;
   int num_threads;
   int loopsize;
+  pthread_mutex_t m;
 } ;
 
 
- struct crypt_data data;
 
-void* recursive(char* target,char* current,int index, int length, int start,int end){
+ char* guessess[256];
+
+void* recursive(char* target,char* current,int index, int length, int start,int end,struct crypt_data* data){
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
   const unsigned int allowed_alphabet_size = 26;
   
@@ -28,8 +30,8 @@ void* recursive(char* target,char* current,int index, int length, int start,int 
     char salt[3];
     strncpy(salt,target,2);
     salt[2] = '\0';
-    char* crypted_attempt = crypt_r(current,salt,&data);
-    printf("%s => %s vs %s\n",current,crypted_attempt,target);
+    char* crypted_attempt = crypt_r(current,salt,data);
+  //  printf("%s => %s vs %s\n",current,crypted_attempt,target);
     if(!strcmp(crypted_attempt,target)){
       printf("I FOUND THE PASS AND IT IS %s\n",current);
       exit(0);
@@ -41,7 +43,16 @@ void* recursive(char* target,char* current,int index, int length, int start,int 
     int i;
     for(i=start; i < end; i++ ){
       current[index] = allowed_alphabet[i]; 
-      recursive(target,current,index+1,length-1,0,allowed_alphabet_size);
+      char current_test[256];
+      unsigned int index_test = index+1;
+      unsigned int length_test = length-1;
+
+      index_test = ((index_test > allowed_alphabet_size) ? allowed_alphabet_size : index_test);
+
+      length_test= ((index_test < 0) ? 0 : length_test);
+      strcpy(current_test,current);
+
+      recursive(target,current,index_test,length_test,0,allowed_alphabet_size,data);
     }
    return; 
   }
@@ -49,28 +60,34 @@ void* recursive(char* target,char* current,int index, int length, int start,int 
 }
 
 void* threaded_recurse(void* args){
+  
   struct recurse_arg* arg = (struct recurse_arg*) args;
+  struct crypt_data data; 
+  data.initialized = 0;
   const char allowed_alphabet[] = "abcdefghijklmnopqrstuvwxyz";
   const unsigned int allowed_alphabet_size = 26;
-  char* current = (char*)malloc(256*sizeof(char));
-  current[255] = '\0';
-  char target[256];
+  guessess[arg->thread_number] = (char*)malloc(256*sizeof(char));
   
   int chunk_size = allowed_alphabet_size/arg->num_threads;
   int thread_start =((arg->thread_number) * (chunk_size));
-  int thread_finish = ((arg->thread_number+1) * (chunk_size));
-  printf("%d: %d - %d\n",arg ->thread_number,thread_start, thread_finish);
-  thread_finish = ((thread_finish > allowed_alphabet_size) ? allowed_alphabet_size : thread_finish);
+  int thread_finish = ((arg->thread_number+1) * (chunk_size))+2;
+  //printf("%d: %d - %d\n",arg ->thread_number,thread_start, thread_finish);
+  thread_finish = 
+    ((thread_finish > allowed_alphabet_size) ? allowed_alphabet_size : thread_finish);
   
   int i;
   for(i=0;i<arg->loopsize;i++){
-    recursive(arg->target,arg->current,arg->index,i,thread_start,thread_finish);
+    //int lock = pthread_mutex_lock(&arg->m);
+    //printf("ATTEMPTING FROM %c to %c in thread %d\n",allowed_alphabet[thread_start],allowed_alphabet[thread_finish],arg->thread_number);
+    recursive(arg->target,guessess[arg->thread_number] ,arg->index,i,thread_start,thread_finish,&data);
+    //int unlock = pthread_mutex_unlock(&arg->m);
   }
+  return NULL;
 }
 
 int main(int argc, char** argv){
-  
-  data.initialized = 0;
+  pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+//  data.initialized = 0;
   if(argc != 4){
     printf("Error: Wrong number of input args\n  Usage: crack <threads> <keysize> <target>\n");
     return -1;
@@ -105,11 +122,12 @@ int main(int argc, char** argv){
     char temp2[256];
     arg->current = current; 
     arg->target = argv[3];
-    arg->index=1;
-    arg->length=5;
+    arg->index=0;
+    arg->length=atoi(argv[1]);
     arg->thread_number = i;
     arg->num_threads = atoi(argv[1]);
     arg->loopsize = atoi(argv[2]);
+    arg->m =m;
     pthread_create(&pthreads[i],NULL,threaded_recurse,(void*)arg);
 
   }
